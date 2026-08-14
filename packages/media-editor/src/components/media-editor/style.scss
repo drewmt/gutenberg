@@ -102,10 +102,10 @@
 	.media-editor__sidebar {
 		@include reset;
 
-		// Small left gutter so the tabs and panel content (and the zoom
-		// slider's thumb at its minimum) sit off the sidebar edge.
+		// Keep focus rings, the tabs, and the zoom slider's minimum thumb
+		// clear of the sidebar's clipped edge.
 		@include break-small() {
-			padding-left: 1px;
+			padding-left: var(--wp-admin-border-width-focus);
 		}
 	}
 
