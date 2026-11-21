@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+-   Show a thumbnail for images without a MIME type in the media control. ([#87199](https://github.com/WordPress/gutenberg/issues/87199)).
+
 ## 6.2.0 (2026-11-18)
 
 ### Enhancements

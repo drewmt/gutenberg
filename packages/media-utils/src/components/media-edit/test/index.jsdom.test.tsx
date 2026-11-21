@@ -189,4 +189,48 @@ describe( 'MediaEdit', () => {
 			'https://example.com/42-1024x768.jpg'
 		);
 	} );
+
+	it.each( [
+		[
+			'image without a MIME type',
+			'image',
+			'',
+			[ 'https://example.com/media/42' ],
+		],
+		[ 'file without a MIME type', 'file', '', [] ],
+		[ 'known non-image MIME type', 'image', 'application/pdf', [] ],
+	] )(
+		'renders the appropriate preview for %s',
+		( _, mediaType, mimeType, expectedImageSources ) => {
+			const attachment = {
+				id: 42,
+				media_type: mediaType,
+				mime_type: mimeType,
+				alt_text: 'Remote attachment',
+				title: { rendered: 'Remote attachment' },
+				source_url: 'https://example.com/media/42',
+				media_details: {},
+			};
+			render(
+				<RegistryProvider
+					value={ createTestRegistry( {
+						attachments: [ attachment ],
+					} ) }
+				>
+					<MediaEditControl
+						data={ { featured_media: 42 } }
+						field={ field }
+						onChange={ () => {} }
+						isExpanded
+						featuredImageFlow
+					/>
+				</RegistryProvider>
+			);
+			expect(
+				screen
+					.queryAllByRole( 'img', { name: 'Remote attachment' } )
+					.map( ( image ) => image.getAttribute( 'src' ) )
+			).toEqual( expectedImageSources );
+		}
+	);
 } );

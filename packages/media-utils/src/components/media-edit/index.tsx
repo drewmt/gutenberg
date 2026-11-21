@@ -277,6 +277,14 @@ function MoveButtons( {
 	);
 }
 
+function isImageAttachment( attachment: MediaEditAttachment ) {
+	if ( attachment.mime_type ) {
+		return attachment.mime_type.startsWith( 'image' );
+	}
+	// A remote image may have a media type without a known MIME type.
+	return 'media_type' in attachment && attachment.media_type === 'image';
+}
+
 function MediaPreview( {
 	attachment,
 	getPreviewUrl,
@@ -291,7 +299,7 @@ function MediaPreview( {
 			? getPreviewUrl( attachment as Attachment< 'view' > )
 			: attachment.source_url;
 	const mimeType = attachment.mime_type || '';
-	if ( mimeType.startsWith( 'image' ) ) {
+	if ( isImageAttachment( attachment ) ) {
 		return (
 			<img
 				className="media-edit__thumbnail"
@@ -360,8 +368,7 @@ function ExpandedMediaEditAttachments( {
 			} ) }
 		>
 			{ allItems?.map( ( attachment, index ) => {
-				const hasPreviewImage =
-					attachment.mime_type?.startsWith( 'image' );
+				const hasPreviewImage = isImageAttachment( attachment );
 				const isBlob = isBlobURL( attachment.source_url );
 				const attachmentNumericId = attachment.id as number;
 				return (
